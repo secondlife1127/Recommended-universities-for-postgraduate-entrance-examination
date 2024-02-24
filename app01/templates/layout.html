@@ -1,0 +1,200 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <link>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>考研院校推荐系统</title>
+    <link data-n-head="ssr" rel="icon" type="image/x-icon"
+          href="https://cityservice-hb.bj.bcebos.com/cityservice-hb/icon/60d42aec6867.png">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-3.4.1/css/bootstrap.min.css' %} ">
+
+
+    {% block css %}{% endblock %}
+
+
+</head>
+<body>
+
+
+<!--导航条 -->
+<nav class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" id="main">
+                                <span>
+                                    <img width="30px" height="25px"
+                                         src="https://cityservice-hb.bj.bcebos.com/cityservice-hb/icon/60d42aec6867.png"
+                                         alt="https://cityservice-hb.bj.bcebos.com/cityservice-hb/icon/60d42aec6867.png"
+                                         class="service-item-img_2tNhF c-gap-right-middle">
+                                </span>
+                考研院校推荐系统
+            </a>
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                {#                <li class="dropdown">#}
+                {#                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"#}
+                {#                       aria-expanded="false">查院校 <span class="caret"></span></a>#}
+                {#                    <ul class="dropdown-menu">#}
+                {#                        <li><a href="/admin/list/">管理员账户</a></li>#}
+                {#                        <li><a href="/depart/list/">部门管理</a></li>#}
+                {#                        <li><a href="/user/list/">用户管理</a></li>#}
+                {#                        <li><a href="/pretty/list/">靓号管理</a></li>#}
+                {#                        <li><a href="/task/list/">任务管理</a></li>#}
+                {#                    </ul>#}
+                {#                </li>#}
+                <li class="{{ a0 }}"><a href="/">首页</a></li>
+                {#                <li class="dropdown">#}
+                {#                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"#}
+                {#                       aria-expanded="false">信息查询<span class="caret"></span></a>#}
+                {#                    <ul class="dropdown-menu">#}
+                {#                        <li class="{{ a1 }}"><a href="/school/list/">查学校</a></li>#}
+                {#                        <li class="{{ a2 }}"><a href="/special/list/">查专业</a></li>#}
+                {#                        <li class="{{ a3 }}"><a href="/scoreline/list/">查分数线</a></li>#}
+                {#                        <li class="{{ a4 }}"><a href="/rate/list/">查报录比</a></li>#}
+                {#                    </ul>#}
+                {#                </li>#}
+                {#                <li class="{{ a1 }}"><a href="/school/list/">查学校</a></li>#}
+                {#                <li class="{{ a2 }}"><a href="/special/list/">查专业</a></li>#}
+                {#                <li class="{{ a3 }}"><a href="/scoreline/list/">查分数线</a></li>#}
+                {#                <li class="{{ a4 }}"><a href="/rate/list/">查报录比</a></li>#}
+                <li class="{{ a1 }}"><a href="/school/list/">院校评分</a></li>
+                <li class="{{ a2 }}"><a href="/special/list/">查专业</a></li>
+                <li class="{{ a3 }}"><a href="/scoreline/list/">查分数线</a></li>
+                <li class="{{ a4 }}"><a href="/rate/list/">查报录比</a></li>
+                <li class="{{ a5 }}"><a href="/recommend_user/10/">院校推荐</a></li>
+                <li class="{{ a6 }}"><a href="/chart/list">数据可视化</a></li>
+                <li class="{{ a7 }}"><a href="/score/list">我的评分</a></li>
+                <li class="{{ a8 }}"><a href="/collection/list">我的收藏</a></li>
+
+                {#                <li><a href="/user/list/">用户列表</a></li>#}
+
+            </ul>
+
+
+            <ul class="nav navbar-nav navbar-right">
+                {% if request.session.info.name %}
+                    <li><a href="/admin" target="_blank">管理员登录</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                           aria-haspopup="true"
+                           aria-expanded="false">{{ request.session.info.name }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/user/info">我的资料</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="/logout/">注销</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="/login" target="_blank">登录</a></li>
+                    <li><a href="/register" target="_blank">注册</a></li>
+
+                {% endif %}
+
+                {#                <li><a href="/admin" target="_blank">管理员登录</a></li>#}
+
+
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div id="head_graph" style="width: 100%;height: 100px"></div>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    {% block content %}{% endblock %}
+</div>
+
+<script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>
+<script src="{% static 'plugins/bootstrap-3.4.1/js/bootstrap.min.js' %}"></script>
+<script src="{% static 'js/echarts.js' %}"></script>
+{#<script src="{% static 'js/echarts.min.js' %}"></script>#}
+
+<script src="{% static 'js/china.js' %}"></script>
+<script src="{% static 'js/jquery.js' %}"></script>
+
+<!-- 先引入jquery -->
+<!-- 必须先引入china.js 这个文件 因为中国地图需要 -->
+
+
+<script type="text/javascript">
+    var chartDom = document.getElementById('head_graph');
+    var myChart = echarts.init(chartDom);
+    var option;
+
+    option = {
+        graphic: {
+            elements: [
+                {
+                    type: 'text',
+                    left: 'center',
+                    top: 'center',
+                    style: {
+                        text: '考研院校推荐系统',
+                        fontSize: 80,
+                        fontWeight: 'bold',
+                        lineDash: [0, 200],
+                        lineDashOffset: 0,
+                        fill: 'transparent',
+                        stroke: '#000',
+                        lineWidth: 1
+                    },
+                    keyframeAnimation: {
+                        duration: 3000,
+                        loop: true,
+                        keyframes: [
+                            {
+                                percent: 0.7,
+                                style: {
+                                    fill: 'transparent',
+                                    lineDashOffset: 200,
+                                    lineDash: [200, 0]
+                                }
+                            },
+                            {
+                                // Stop for a while.
+                                percent: 0.8,
+                                style: {
+                                    fill: 'transparent'
+                                }
+                            },
+                            {
+                                percent: 1,
+                                style: {
+                                    fill: 'black'
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    };
+    option && myChart.setOption(option);
+
+</script>
+
+
+{% block js %}{% endblock %}
+</body>
+</html>

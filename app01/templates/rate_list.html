@@ -1,0 +1,75 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="container">
+        <div style="margin-bottom: 10px" class="clearfix">
+
+
+            <div style="float: right;width: 300px;">
+                <form method="get">
+                    <div class="input-group">
+                        <input type="text" name="q" class="form-control" placeholder="请输入年份或学校名称"
+                               value="{{ search_data }}">
+                        <span class="input-group-btn">
+                        <button class="btn btn-default" type="submit">
+                            <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                        </button>
+                      </span>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+        <div class="panel panel-default">
+            <!-- Default panel contents -->
+            <div class="panel-heading">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                报录比列表
+            </div>
+
+            <!-- Table -->
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    {#                    <th>ID</th>#}
+                    <th>年份</th>
+                    <th>学校</th>
+                    <th>院系</th>
+                    <th>专业代码</th>
+                    <th>专业名称</th>
+                    <th>报考人数</th>
+                    <th>录取人数</th>
+                    <th>报录比</th>
+{#                    <th>操作</th>#}
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in queryset %}
+                    <tr>
+                        <td>{{ obj.year }}</td>
+                        <td>{{ obj.school }}</td>
+                        <td>{{ obj.department }}</td>
+                        <td>{{ obj.code }}</td>
+                        <td>{{ obj.name }}</td>
+                        <td>{{ obj.count }}</td>
+                        <td>{{ obj.record }}</td>
+                        <td>{{ obj.rate }}</td>
+{#                        <td>#}
+{#                            <a class="btn btn-primary btn-xs" href="#">编辑</a>#}
+{#                            <a class="btn btn-danger btn-xs" href="#">删除</a>#}
+{#                        </td>#}
+                    </tr>
+                {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+        <div class="clearfix">
+            <ul class="pagination">
+                {{ page_string }}
+            </ul>
+
+        </div>
+
+    </div>
+{% endblock %}

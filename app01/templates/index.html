@@ -1,0 +1,119 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="container">
+
+    <div style="margin-bottom: 10px" class="clearfix">
+        <div class="row" style="height: 50px;">
+            <div class="col-sm-6">
+                <div style="height: 10px;width: 330px">
+                    <form method="get" style="float:left;height: 25px">
+                        <label for="location">地区选择:</label>
+                        <label>
+                            <select name="location">
+                                <option value="">All</option>
+                                {% for location in locations %}
+                                    <option value="{{ location }}">{{ location }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                        <button type="submit" style="border-radius: 5px;height: 25px">提交</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div style="float: right;width: 300px;">
+                    <div style="float: right;width: 300px;">
+                        <form method="get">
+                            <div class="input-group">
+                                <input type="text" name="q" class="form-control" placeholder="请输入学校名称或位置"
+                                       value="{{ search_data }}">
+                                <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                </button>
+            </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for school in queryset %}
+                <div class="col-sm-4">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div style="height: 100px;width: 330px">
+                                <div class="name" style="display: flex; align-items: center;">
+                                    <img src='{{ school.icon }}' alt=""
+                                         style=" width: 90px;height: 90px;margin-top: 5px">
+                                    <div>
+                                        <h4 style="margin-top: 0;text-align: center">
+                                            <a href="{{ link }}{{ school.url }}"
+                                               target="_blank">{{ school.name }}</a>
+                                        </h4>
+                                        <h5 style="text-align: center">位置:{{ school.location }}</h5>
+                                        <h5 style="text-align: center">隶属:{{ school.department }}</h5>
+                                        <h6 style="text-align: center;background: #EBF4FB;color: #1887E0;margin: 0">
+                                            {% if school.is_research %}
+                                                {{ school.get_is_research_display }}
+                                            {% endif %}
+                                            {% if school.is_auto_line %}
+                                                {% if school.is_research %}|{% endif %}
+                                                {{ school.get_is_auto_line_display }}
+                                            {% endif %}
+                                            {% if school.is_double_one %}
+                                                {% if school.is_research or school.is_auto_line %}|{% endif %}
+                                                {{ school.get_is_double_one_display }}
+                                            {% endif %}
+                                        </h6>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="clearfix">
+            <ul class="pagination">
+                {{ page_string }}
+            </ul>
+
+        </div>
+
+
+    </div>
+{% endblock %}
+
+
+{% block js %}
+
+    <!-- 引入jQuery库 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- 引入Bootstrap的JavaScript文件 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.4.0/dist/js/bootstrap.bundle.min.js"></script>
+
+
+
+    <script src="{% static 'js/echarts.js' %}"></script>
+    <script src="{% static 'js/customed.js' %}"></script>
+
+    <!-- 引入jQuery库 -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- JavaScript代码 -->
+
+
+
+
+
+
+
+{% endblock %}

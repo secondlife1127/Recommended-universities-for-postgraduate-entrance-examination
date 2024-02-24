@@ -1,0 +1,409 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+    <div class="container">
+
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    {#                    <div class="panel-heading">院校收藏榜</div>#}
+                    <div class="panel-body">
+                        <div id="school_collection" style="width: 100%;height: 500px"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="panel panel-default">
+                    {#                    <div class="panel-heading">院校评分榜</div>#}
+                    <div class="panel-body">
+                        <div id="school_score" style="width: 100%;height: 500px;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    {#                    <div class="panel-heading">院校收藏榜</div>#}
+                    <div class="panel-body">
+                        <div id="total_school" style="width: 100%;height: 380px"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="double_school" style="width: 100%;height: 380px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="panel panel-default">
+                    {#                    <div class="panel-heading">院校评分榜</div>#}
+                    <div class="panel-body">
+                        <div id="auto_school" style="width: 100%;height: 380px;"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!--
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">院校收藏榜</div>
+                            <div class="panel-body">
+                                <div id="map" style="width: 100%;height: 1000px"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        -->
+    </div>
+
+
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'js/echarts.js' %}"></script>
+    <script src="{% static 'js/customed.js' %}"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.0.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://assets.pyecharts.org/assets/echarts.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.4.2/echarts.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="{% static 'js/china.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/semantic.min.css' %}">
+    <script type="text/javascript">
+
+
+        function initDoubleSchool() {
+            var chartDom = document.getElementById('double_school');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                title: {
+                    text: '双一流院校数量排名前十的省份'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    bottom: 0,
+                    left: 'center'
+                },
+                series: [
+                    {
+                        center: ["50%", "45%"],
+                        name: '双一流院校数量',
+                        type: 'pie',
+                        top: 0,
+                        left: 0,
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 40,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: []
+                    }
+                ]
+            };
+
+            $.ajax({
+                url: "/chart/double_school/",
+                type: "get",
+                dataType: "JSON",
+                success: function (res) {
+                    option.series[0].data = res.double_data;
+                    myChart.setOption(option);
+                }
+            })
+        }
+
+        function initAutoSchool() {
+            var chartDom = document.getElementById('auto_school');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                title: {
+                    text: '自划线院校数量排名前十的省份'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    bottom: 0,
+                    left: 'center'
+                },
+                series: [
+                    {
+                        center: ["50%", "45%"],
+                        name: '自划线院校数量',
+                        type: 'pie',
+                        top: 0,
+                        left: 0,
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 40,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: []
+                    }
+                ]
+            };
+
+            $.ajax({
+                url: "/chart/auto_school/",
+                type: "get",
+                dataType: "JSON",
+                success: function (res) {
+                    option.series[0].data = res.auto_data;
+                    myChart.setOption(option);
+                }
+            })
+
+        }
+
+
+        $(function () {
+            initSchoolCollection();
+            initSchoolScore();
+            initTotalSchool();
+            initDoubleSchool();
+            initAutoSchool();
+
+        })
+
+
+        function initSchoolCollection() {
+
+            var chartDom = document.getElementById('school_collection');
+            var myChart = echarts.init(chartDom);
+            var option;
+            option = {
+                title: {
+                    text: '院校收藏榜'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {},
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    boundaryGap: [0, 0.01]
+                },
+                yAxis: {
+                    type: 'category',
+                    data: []
+                },
+                series: [
+                    {
+                        name: '',
+                        type: 'bar',
+                        data: [],
+                        itemStyle: {
+                            color: 'rgb(45, 196, 205)',
+                            borderRadius: 20
+                        }
+                    },
+                ]
+            };
+
+            $.ajax({
+                url: "/chart/school_collection/",
+                type: "get",
+                dataType: "JSON",
+                success: function (res) {
+                    option.yAxis.data = res.x_data;
+                    option.series[0].data = res.y_data;
+                    myChart.setOption(option);
+                }
+            })
+        }
+
+
+        function initSchoolScore() {
+
+            var chartDom = document.getElementById('school_score');
+            var myChart = echarts.init(chartDom);
+            var option;
+            option = {
+                title: {
+                    text: '院校评分榜'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {},
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'value',
+                    boundaryGap: [0, 0.01]
+                },
+                yAxis: {
+                    type: 'category',
+                    data: []
+                },
+                series: [
+                    {
+                        name: '',
+                        type: 'bar',
+                        data: [],
+                        itemStyle: {
+                            color: 'rgb(238, 102, 102)',
+                            borderRadius: 20
+                        }
+                    },
+                ]
+            };
+
+            $.ajax({
+                url: "/chart/school_score/",
+                type: "get",
+                dataType: "JSON",
+                success: function (res) {
+                    option.yAxis.data = res.x_data;
+                    option.series[0].data = res.y_data;
+                    myChart.setOption(option);
+                }
+            })
+        }
+
+        function initTotalSchool() {
+            var chartDom = document.getElementById('total_school');
+            var myChart = echarts.init(chartDom);
+            var option;
+
+            option = {
+                title: {
+                    text: '院校总数量排名前十的省份'
+                },
+                tooltip: {
+                    trigger: 'item'
+                },
+                legend: {
+                    bottom: 0,
+                    left: 'center'
+                },
+                series: [
+                    {
+                        center: ["50%", "45%"],
+                        name: '院校总数量',
+                        type: 'pie',
+                        top: 0,
+                        left: 0,
+                        radius: ['40%', '70%'],
+                        avoidLabelOverlap: false,
+                        itemStyle: {
+                            borderRadius: 10,
+                            borderColor: '#fff',
+                            borderWidth: 2
+                        },
+                        label: {
+                            show: false,
+                            position: 'center'
+                        },
+                        emphasis: {
+                            label: {
+                                show: true,
+                                fontSize: 40,
+                                fontWeight: 'bold'
+                            }
+                        },
+                        labelLine: {
+                            show: false
+                        },
+                        data: []
+                    }
+                ]
+            };
+            $.ajax({
+                url: "/chart/total_school/",
+                type: "get",
+                dataType: "JSON",
+                success: function (res) {
+                    option.series[0].data = res.total_data;
+                    myChart.setOption(option);
+                }
+            })
+
+
+        }
+
+        <!--
+                var chart = echarts.init(document.getElementById('map'), 'white', {renderer: 'canvas'});
+
+                $(
+                    function () {
+                        fetchData(chart);
+                    }
+                );
+
+                function fetchData() {
+                    $.ajax({
+                        type: "GET",
+                        url: "/chart/map",
+                        dataType: 'json',
+                        success: function (result) {
+                            chart.setOption(result.data);
+                        }
+                    });
+                }
+        -->
+
+    </script>
+{% endblock %}

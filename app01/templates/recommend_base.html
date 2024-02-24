@@ -1,0 +1,149 @@
+<!-- templates/recommend.html -->
+{% extends 'layout.html' %}
+
+{% block content %}
+
+    <div class="container">
+        <div style="float: right;width: 70px;border-radius: 0">
+            <div class="input-group">
+                {#                <button type="button" class="btn btn-default"><a href="#">换一批</a></button>#}
+            </div>
+        </div>
+        <div style="margin-bottom: 10px" class="clearfix">
+
+            <!-- Split button -->
+            {#            <div class="btn-group" role="group" aria-label="...">#}
+            {#                <button type="button" class="btn btn-default"><a href="/recommend_user/10">基于评分推荐</a></button>#}
+            {#                <button type="button" class="btn btn-default"><a href="/recommend_user/1">基于收藏推荐</a></button>#}
+            {#                <form>#}
+            {#                    <input type="text" name="alpha_user" class="form-control" placeholder="请输入推荐参数（1-10）"#}
+            {#                           value="{{ alpha }}">#}
+            {#                    <button type="submit" class="button btn-default"> <a>基于参数混合推荐</a></button>#}
+            {#                </form>#}
+            {#            </div>#}
+            <div style="display: flex; align-items: center;">
+                <button type="button" class="btn btn-default" style="margin-right: 10px;"><a href="/recommend_user/10">基于评分推荐</a>
+                </button>
+                <button type="button" class="btn btn-default" style="margin-right: 10px;"><a href="/recommend_user/0">基于收藏推荐</a>
+                </button>
+                <form style="display: flex; align-items: center;">
+                    <input type="text" name="alpha_user" class="form-control" placeholder="请输入推荐参数"
+                           value="{{ alpha }}" style="margin-right: 10px;width: 130px">
+                    <button type="submit" class="button btn-default"
+                            style="height: 34px;width: 130px;border-radius: 5px"><a>基于参数混合推荐</a></button>
+                    <h5 style="margin-bottom: 0;margin-left: 5px;background: #fff4e3;color: #ff9f11;">
+                        参数越大越接近基于评分推荐</h5>
+                </form>
+            </div>
+
+
+        </div>
+
+
+        {#        <div class="row">#}
+        {#            <div class="col-sm-6">#}
+        {##}
+        {#            </div>#}
+        {#                #}
+        {#        </div>#}
+
+        <div class="row">
+            {% for school in recommended_schools %}
+                <div class="col-sm-3">
+                    <div class="panel panel-default">
+                        {#                        <div class="panel-heading">院校收藏榜</div>#}
+                        <div class="panel-body">
+                            <div style="height: 240px;width: 230px;">
+                                <div class="icon">
+                                    <img src='{{ school.icon }}' alt=""
+                                         style=" width: 100px;max-width: 120px;height: 100px;margin-left: 65px">
+                                </div>
+                                <p></p>
+                                <h3 style="margin: 0;font-size: 18px;text-align: center">
+                                    <a href="{{ link }}{{ school.url }}" target="_blank">{{ school.name }}</a>
+                                </h3>
+                                <h4 style="text-align: center">{{ school.location }}</h4>
+                                <h4 style="text-align: center">{{ school.department }}</h4>
+                                <h5 style="background: #EBF4FB;color: #1887E0;text-align: center">
+                                    {% if school.is_research %}
+                                        {{ school.get_is_research_display }}
+                                    {% endif %}
+                                    {% if school.is_auto_line %}
+                                        {% if school.is_research %}|{% endif %}
+                                        {{ school.get_is_auto_line_display }}
+                                    {% endif %}
+                                    {% if school.is_double_one %}
+                                        {% if school.is_research or school.is_auto_line %}|{% endif %}
+                                        {{ school.get_is_double_one_display }}
+                                    {% endif %}
+                                </h5>
+
+
+                                <div style="margin-left: 40px;">
+                                    <form id="score-form-{{ school.id }}" style="display: inline;">
+                                        <label>
+                                            {% csrf_token %}
+                                            <select name="score" style="width: 100px; height: 100%">
+                                                <option value="">请选择评分</option>
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                            </select>
+                                        </label>
+                                        <button type="submit" class="button btn-success" style="border-radius: 10px">提交
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="clearfix">
+            <ul class="pagination">
+                {{ page_string }}
+            </ul>
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(document).ready(function () {
+            // 绑定表单提交事件
+            $('body').on('submit', 'form[id^="score-form-"]', function (e) {
+                e.preventDefault();  // 阻止默认的表单提交行为
+
+                var form = $(this);  // 获取提交的表单元素
+                var objId = form.attr('id').split('-')[2];  // 提取 obj_id
+
+                // 发送 Ajax 请求
+                $.ajax({
+                    type: 'POST',
+                    url: '/user/score/' + objId + '/',
+                    data: form.serialize(),  // 将表单数据序列化
+                    dataType: 'json',
+                    success: function () {
+                        alert("提交成功！")
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        // 处理请求错误
+                        alert("请输入正确的评分！")
+                    }
+                });
+            })
+            ;
+        });
+
+    </script>
+{% endblock %}
+
